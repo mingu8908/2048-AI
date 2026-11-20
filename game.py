@@ -44,3 +44,29 @@ def place(board, cell, value):
     new = list(board)
     new[cell] = value
     return tuple(new)
+
+class Game:
+    def __init__(self, seed=None, board=None, score=0):
+        self.rng = random.Random(seed)
+        self.board = board or self.spawn(self.spawn((0,) * 16))
+        self.score = score
+        self.n_moves = 0
+
+    def spawn(self, board):
+        cell = self.rng.choice(empty_cells(board))
+        return place(board, cell, 1 if self.rng.random() < 0.9 else 2)
+
+    def step(self, direction):
+        new, points = move(self.board, direction)
+        if new == self.board:
+            return None
+        self.board = self.spawn(new)
+        self.score += points
+        self.n_moves += 1
+        return points
+
+    def over(self):
+        return all(move(self.board, d)[0] == self.board for d in DIRS)
+
+    def max_tile(self):
+        return 2 ** max(self.board)
