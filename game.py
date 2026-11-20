@@ -70,3 +70,13 @@ class Game:
 
     def max_tile(self):
         return 2 ** max(self.board)
+
+def to_values(board):
+    return [2 ** x if x else 0 for x in board]
+
+
+def render(board, score=0):
+    rows = ['Score: %d' % score]
+    for r in range(4):
+        rows.append(''.join(str(v or '.').rjust(6) for v in to_values(board)[r * 4: r * 4 + 4]))
+    return '\n'.join(rows)
