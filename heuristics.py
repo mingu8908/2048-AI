@@ -1,3 +1,13 @@
+ALL_FEATURES = ['empty', 'merges', 'monotonicity', 'smoothness', 'corner']
+
+WEIGHTS = {
+    'empty': 270,
+    'merges': 700,
+    'monotonicity': 47,
+    'smoothness': 50,
+    'corner': 2000,
+}
+
 def get_lines(board):
     rows = [list(board[r * 4: r * 4 + 4]) for r in range(4)]
     cols = [[board[r * 4 + c] for r in range(4)] for c in range(4)]
@@ -47,3 +57,32 @@ def corner_bonus(board):
     if biggest in (board[0], board[3], board[12], board[15]):
         return biggest
     return 0
+
+def eval_score_only(board, score):
+    return score
+
+
+def eval_heuristic(board, score, features=ALL_FEATURES):
+    value = 0
+    if 'empty' in features:
+        value += WEIGHTS['empty'] * count_empty(board)
+    if 'merges' in features:
+        value += WEIGHTS['merges'] * count_merges(board)
+    if 'monotonicity' in features:
+        value -= WEIGHTS['monotonicity'] * monotonicity_penalty(board)
+    if 'smoothness' in features:
+        value -= WEIGHTS['smoothness'] * smoothness_penalty(board)
+    if 'corner' in features:
+        value += WEIGHTS['corner'] * corner_bonus(board)
+    return value
+
+
+def get_eval(name):
+    if name == 'score':
+        return eval_score_only
+    if name == 'heuristic':
+        return eval_heuristic
+    if name.startswith('no_') and name[3:] in ALL_FEATURES:
+        on = [f for f in ALL_FEATURES if f != name[3:]]
+        return lambda board, score: eval_heuristic(board, score, on)
+    raise ValueError('unknown evaluation: ' + name)
