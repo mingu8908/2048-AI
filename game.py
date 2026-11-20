@@ -9,7 +9,11 @@ LINES = {
     'down':  [[12, 8, 4, 0], [13, 9, 5, 1], [14, 10, 6, 2], [15, 11, 7, 3]],
 }
 
+SLIDE_CACHE = {}
+
 def slide_line(line):
+    if line in SLIDE_CACHE:
+        return SLIDE_CACHE[line]
     tiles = [x for x in line if x != 0]
     result = []
     points = 0
@@ -23,6 +27,7 @@ def slide_line(line):
             result.append(tiles[i])
             i += 1
     result += [0] * (4 - len(result))
+    SLIDE_CACHE[line] = tuple(result), points
     return tuple(result), points
 
 def move(board, direction):
