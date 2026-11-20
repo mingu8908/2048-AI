@@ -33,3 +33,11 @@ def monotonicity_penalty(board):
                 up += b - a
         total += min(up, down)
     return total
+
+def smoothness_penalty(board):
+    total = 0
+    for line in get_lines(board):
+        tiles = [x for x in line if x != 0]
+        for i in range(len(tiles) - 1):
+            total += abs(tiles[i] - tiles[i + 1])
+    return total
