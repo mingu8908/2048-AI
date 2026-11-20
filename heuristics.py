@@ -18,3 +18,18 @@ def count_merges(board):
             else:
                 i += 1
     return pairs
+
+def monotonicity_penalty(board):
+    total = 0
+    for line in get_lines(board):
+        up = 0
+        down = 0
+        for i in range(3):
+            a = line[i] ** 4
+            b = line[i + 1] ** 4
+            if a > b:
+                down += a - b
+            else:
+                up += b - a
+        total += min(up, down)
+    return total
