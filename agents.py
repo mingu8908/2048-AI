@@ -95,3 +95,18 @@ class ExpectimaxAgent(MinimaxAgent):
         if prob < self.min_prob:
             return self.eval_fn(board, score)
         return super().max_value(board, score, depth, prob)
+
+    def chance_value(self, board, score, depth, prob):
+        key = (board, score, depth, 'chance')
+        if key in self.cache:
+            return self.cache[key]
+        cells = empty_cells(board)
+        if len(cells) > self.max_cells:
+            cells = self.rng.sample(cells, self.max_cells)
+        total = 0
+        for cell in cells:
+            p_cell = 1 / len(cells)
+            total += p_cell * 0.9 * self.max_value(place(board, cell, 1), score, depth - 1, prob * p_cell * 0.9)
+            total += p_cell * 0.1 * self.max_value(place(board, cell, 2), score, depth - 1, prob * p_cell * 0.1)
+        self.cache[key] = total
+        return total
