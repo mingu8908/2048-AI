@@ -26,3 +26,30 @@ class RandomAgent:
             scores[best] = 1
         self.last_time = time.time() - start
         return best, scores
+
+class MinimaxAgent:
+    def __init__(self, depth=3, eval_fn=eval_heuristic, seed=None):
+        self.depth = depth
+        self.eval_fn = eval_fn
+        self.rng = random.Random(seed)
+        self.cache = {}
+        self.last_time = 0.0
+        self.name = 'Minimax'
+
+    def max_value(self, board, score, depth, prob):
+        if depth == 0:
+            return self.eval_fn(board, score)
+        key = (board, score, depth, 'max')
+        if key in self.cache:
+            return self.cache[key]
+        best = None
+        for d in DIRS:
+            new_board, gain = move(board, d)
+            if new_board != board:
+                value = self.chance_value(new_board, score + gain, depth, prob)
+                if best is None or value > best:
+                    best = value
+        if best is None:
+            best = DEATH
+        self.cache[key] = best
+        return best
