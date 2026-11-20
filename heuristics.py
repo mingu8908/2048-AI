@@ -41,3 +41,9 @@ def smoothness_penalty(board):
         for i in range(len(tiles) - 1):
             total += abs(tiles[i] - tiles[i + 1])
     return total
+
+def corner_bonus(board):
+    biggest = max(board)
+    if biggest in (board[0], board[3], board[12], board[15]):
+        return biggest
+    return 0
