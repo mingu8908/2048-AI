@@ -83,3 +83,15 @@ class MinimaxAgent:
                     worst = value
         self.cache[key] = worst
         return worst
+
+class ExpectimaxAgent(MinimaxAgent):
+    def __init__(self, depth=3, eval_fn=eval_heuristic, max_cells=6, min_prob=0.001, seed=None):
+        super().__init__(depth, eval_fn, seed)
+        self.max_cells = max_cells
+        self.min_prob = min_prob
+        self.name = 'Expectimax'
+
+    def max_value(self, board, score, depth, prob):
+        if prob < self.min_prob:
+            return self.eval_fn(board, score)
+        return super().max_value(board, score, depth, prob)
