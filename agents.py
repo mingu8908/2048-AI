@@ -53,3 +53,16 @@ class MinimaxAgent:
             best = DEATH
         self.cache[key] = best
         return best
+
+    def chance_value(self, board, score, depth, prob):
+        key = (board, score, depth, 'chance')
+        if key in self.cache:
+            return self.cache[key]
+        worst = None
+        for cell in empty_cells(board):
+            for tile in (1, 2):
+                value = self.max_value(place(board, cell, tile), score, depth - 1, prob)
+                if worst is None or value < worst:
+                    worst = value
+        self.cache[key] = worst
+        return worst
