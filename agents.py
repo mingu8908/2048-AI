@@ -36,6 +36,23 @@ class MinimaxAgent:
         self.last_time = 0.0
         self.name = 'Minimax'
 
+    def choose(self, board, score=0):
+        start = time.time()
+        self.cache = {}
+        scores = {}
+        for d in DIRS:
+            new_board, gain = move(board, d)
+            if new_board == board:
+                scores[d] = None
+            else:
+                scores[d] = self.chance_value(new_board, score + gain, self.depth, 1.0)
+        best = None
+        for d in DIRS:
+            if scores[d] is not None and (best is None or scores[d] > scores[best]):
+                best = d
+        self.last_time = time.time() - start
+        return best, scores
+
     def max_value(self, board, score, depth, prob):
         if depth == 0:
             return self.eval_fn(board, score)
