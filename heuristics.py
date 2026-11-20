@@ -3,6 +3,18 @@ def get_lines(board):
     cols = [[board[r * 4 + c] for r in range(4)] for c in range(4)]
     return rows + cols
 
-
 def count_empty(board):
     return board.count(0)
+
+def count_merges(board):
+    pairs = 0
+    for line in get_lines(board):
+        tiles = [x for x in line if x != 0]
+        i = 0
+        while i < len(tiles) - 1:
+            if tiles[i] == tiles[i + 1]:
+                pairs += 1
+                i += 2
+            else:
+                i += 1
+    return pairs
