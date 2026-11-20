@@ -35,3 +35,12 @@ def move(board, direction):
             new[i] = v
         points += p
     return tuple(new), points
+
+def empty_cells(board):
+    return [i for i in range(16) if board[i] == 0]
+
+
+def place(board, cell, value):
+    new = list(board)
+    new[cell] = value
+    return tuple(new)
