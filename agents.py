@@ -154,3 +154,27 @@ class MCTSAgent:
                 best = d
         self.last_time = time.time() - start
         return best, scores
+
+def make_agent(name, depth=3, eval_name='heuristic', rollouts=100, seed=None):
+    from heuristics import get_eval
+    if name == 'random':
+        return RandomAgent(seed)
+    if name == 'minimax':
+        return MinimaxAgent(depth, get_eval(eval_name), seed)
+    if name == 'expectimax':
+        return ExpectimaxAgent(depth, get_eval(eval_name), seed=seed)
+    if name == 'mcts':
+        return MCTSAgent(rollouts, seed)
+    raise ValueError('unknown agent: ' + name)
+
+
+def play_game(agent, seed=None, board=None, score=0):
+    from game import Game
+    game = Game(seed=seed, board=board, score=score)
+    times = []
+    while not game.over():
+        action, scores = agent.choose(game.board, game.score)
+        times.append(agent.last_time)
+        game.step(action)
+    return {'score': game.score, 'max_tile': game.max_tile(), 'moves': game.n_moves,
+            'sec_per_move': sum(times) / max(1, len(times)), 'max_sec_per_move': max(times, default=0)}
