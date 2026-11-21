@@ -110,3 +110,26 @@ class ExpectimaxAgent(MinimaxAgent):
             total += p_cell * 0.1 * self.max_value(place(board, cell, 2), score, depth - 1, prob * p_cell * 0.1)
         self.cache[key] = total
         return total
+
+class MCTSAgent:
+    def __init__(self, rollouts=100, seed=None):
+        self.rollouts = rollouts
+        self.rng = random.Random(seed)
+        self.last_time = 0.0
+        self.name = 'MCTS'
+
+    def random_game(self, board):
+        points = 0
+        while True:
+            moves = []
+            for d in DIRS:
+                new_board, gain = move(board, d)
+                if new_board != board:
+                    moves.append((new_board, gain))
+            if not moves:
+                return points
+            new_board, gain = self.rng.choice(moves)
+            points += gain
+            cell = self.rng.choice(empty_cells(new_board))
+            tile = 1 if self.rng.random() < 0.9 else 2
+            board = place(new_board, cell, tile)
