@@ -133,3 +133,24 @@ class MCTSAgent:
             cell = self.rng.choice(empty_cells(new_board))
             tile = 1 if self.rng.random() < 0.9 else 2
             board = place(new_board, cell, tile)
+
+    def choose(self, board, score=0):
+        start = time.time()
+        scores = {}
+        for d in DIRS:
+            new_board, gain = move(board, d)
+            if new_board == board:
+                scores[d] = None
+                continue
+            total = 0
+            for _ in range(self.rollouts):
+                cell = self.rng.choice(empty_cells(new_board))
+                tile = 1 if self.rng.random() < 0.9 else 2
+                total += gain + self.random_game(place(new_board, cell, tile))
+            scores[d] = score + total / self.rollouts
+        best = None
+        for d in DIRS:
+            if scores[d] is not None and (best is None or scores[d] > scores[best]):
+                best = d
+        self.last_time = time.time() - start
+        return best, scores
