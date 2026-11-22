@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>2048 AI</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <header>
+    <h1>2048 AI</h1>
+    <p class="sub">Minimax vs Expectimax vs Monte Carlo &middot; CSE 352</p>
+  </header>
+
+  <main>
+    <section class="left">
+      <div class="stats">
+        <div class="stat"><span class="label">Score</span><span id="score">0</span></div>
+        <div class="stat"><span class="label">Max tile</span><span id="maxtile">0</span></div>
+        <div class="stat"><span class="label">Moves</span><span id="moves">0</span></div>
+      </div>
+      <div id="board" class="board"></div>
+      <p id="message" class="message">Loading Python in the browser&hellip;</p>
+      <p class="hint">You play with the arrow keys or WASD.</p>
+    </section>
+
+    <section class="right">
+      <div class="panel">
+        <h2>Game</h2>
+        <div class="row">
+          <button id="btn-new">New game</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>AI</h2>
+        <label>Agent
+          <select id="agent">
+            <option value="expectimax">Expectimax</option>
+            <option value="minimax">Minimax</option>
+            <option value="mcts">Monte Carlo</option>
+            <option value="random">Random</option>
+          </select>
+        </label>
+        <label>Search depth
+          <select id="depth">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3" selected>3</option>
+          </select>
+        </label>
+        <label>Evaluation
+          <select id="evalname">
+            <option value="heuristic">Features (heuristic)</option>
+            <option value="score">Score only</option>
+          </select>
+        </label>
+        <label>Rollouts per move (Monte Carlo)
+          <input id="rollouts" type="number" min="10" max="500" step="10" value="50" />
+        </label>
+        <label>Delay between moves: <span id="delay-val">100</span> ms
+          <input id="delay" type="range" min="0" max="1000" step="50" value="100" />
+        </label>
+        <label class="check"><input id="stop2048" type="checkbox" checked /> Stop when 2048 appears</label>
+        <div class="row">
+          <button id="btn-step" class="primary">AI: one move</button>
+          <button id="btn-play" class="primary">AI: play</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2>What the AI thinks</h2>
+        <div id="bars" class="bars"></div>
+        <p id="ai-info" class="info">Press "AI: one move" to see the value of each direction.</p>
+      </div>
+    </section>
+  </main>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
