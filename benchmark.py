@@ -28,6 +28,25 @@ EXPERIMENTS = {
     ],
 }
 
+def summarize(label, rows):
+    n = len(rows)
+    scores = [r['score'] for r in rows]
+    return {
+        'config': label,
+        'games': n,
+        'mean_score': round(sum(scores) / n),
+        'best_score': max(scores),
+        'reach_2048_pct': round(100 * sum(r['max_tile'] >= 2048 for r in rows) / n),
+        'reach_4096_pct': round(100 * sum(r['max_tile'] >= 4096 for r in rows) / n),
+        'sec_per_move': round(sum(r['sec_per_move'] for r in rows) / n, 3),
+    }
+
+
+def save_csv(path, rows):
+    with open(path, 'w', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
+        writer.writeheader()
+        writer.writerows(rows)
 
 def run_one(task):
     label, name, kwargs, seed = task
