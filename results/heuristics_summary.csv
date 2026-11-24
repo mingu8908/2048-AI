@@ -1,0 +1,8 @@
+config,games,mean_score,best_score,reach_2048_pct,reach_4096_pct,sec_per_move
+Score only,10,17218,34688,20,0,0.027
+All 5 features,10,44321,89424,90,20,0.361
+No empty,10,46610,89540,100,20,0.329
+No merges,10,43525,84540,60,40,0.312
+No monotonicity,10,33700,60532,80,20,0.237
+No smoothness,10,42990,80136,80,20,0.265
+No corner,10,50689,90040,80,50,0.288

@@ -1,0 +1,5 @@
+config,games,mean_score,best_score,reach_2048_pct,reach_4096_pct,sec_per_move
+Random,10,920,1500,0,0,0.0
+Minimax d=3,10,21600,39960,40,0,0.611
+Expectimax d=3,10,44321,89424,90,20,0.359
+MCTS 100 rollouts,10,42889,78964,80,40,0.343

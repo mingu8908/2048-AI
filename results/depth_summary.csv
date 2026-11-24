@@ -1,0 +1,4 @@
+config,games,mean_score,best_score,reach_2048_pct,reach_4096_pct,sec_per_move
+Expectimax d=1,10,4728,7552,0,0,0.002
+Expectimax d=2,10,19932,34240,40,0,0.029
+Expectimax d=3,10,44321,89424,90,20,0.301
